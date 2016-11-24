@@ -67,10 +67,19 @@ def get_contour_fft(image_path, show_image, show_values):
     if show_values:
         print 'values:',len(values),'0s:',values.count(0),'1s:',values.count(1),'2s:',values.count(2),'3s:',values.count(3),'4s:',values.count(4),'5s:',values.count(5),'6s:',values.count(6),'7s:',values.count(7)
 
+    # Zero padding to get a 4096 length vector
     while (len(values) < 2**12):
         values.append(0)
 
-    fft = np.fft.fft(values)
+    # Computes FFT, eliminates the second half of the spectrum and computes absoulte values
+    fft = np.fft.fft(values)[1:2**11+1]
+    fft = np.absolute(fft)
 
-    return fft
+    # Normalizes the vector to an amplitude of 100
+    m = max(fft) / 100.0
+    for i in xrange(len(fft)):
+        fft[i] /= m
+
+    #return fft
+    return values[1:2**11+1]
 
