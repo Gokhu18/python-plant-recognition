@@ -1,43 +1,44 @@
-import matplotlib.pyplot as plt
+import cv2
 import numpy as np
-import Image
+import matplotlib.pyplot as plt
 
 def get_contour_fft(image_path, show_image, show_values):
     # Loads the image, resizes it to 640x480 and converts it to gray scale
-    image = Image.open(image_path).resize((640,480)).convert('L')
+    #image = Image.open(image_path).resize((640,480)).convert('L')
     threshold = 220
+    image = cv2.resize(cv2.imread(image_path, 0), (640,480))
+
     # Loads the image into pix as a numpy array
-    pix = image.load()
     # Converts the image to black and white
     for i in range(480):
         for j in range(640):
-            if pix[j,i] < threshold:
-                pix[j,i] = 0
+            if image[i, j] < threshold:
+                image[i, j] = 0
             else:
-                pix[j,i] = 255
+                image[i, j] = 255
 
     flag = 0
     # Finds a point to start the algorithm
     for i in range(480):
         for j in range(640):
-            if pix[j,i] == 0 and flag == 0:
-                x_i = j
-                y_i = i
+            if image[i, j] == 0 and flag == 0:
+                x_i = i
+                y_i = j
                 flag = 1
 
     next = 3
     # [x, y] is the starting point
     x = x_i
     y = y_i
-    pix[x,y] = 128
+    image[x, y] = 128
     values = list()
 
     while x != x_i or y != y_i or len(values) == 0:
         # Creates a list with the neighbour pixels
-        neighbours = [[x-1, y-1], [x, y-1], [x+1, y-1], [x+1, y], [x+1, y+1], [x, y+1], [x-1, y+1], [x-1, y]]
+        neighbours = [[x-1, y-1], [x-1, y], [x-1, y+1], [x, y+1], [x+1, y+1], [x+1, y], [x+1, y-1], [x, y-1]]
         # Finds the direction of the next pixel clockwise
         for i in range(8):
-            pixel = pix[neighbours[next][0], neighbours[next][1]]
+            pixel = image[neighbours[next][0], neighbours[next][1]]
             if pixel == 0 or pixel == 128:
                 break
             next = next + 1
@@ -51,7 +52,7 @@ def get_contour_fft(image_path, show_image, show_values):
         y = neighbours[next][1]
 
         # Changes the pixel color to gray to make it visible on the image
-        pix[x,y] = 128
+        image[x,y] = 128
 
         # Little trick to make the algorithm work
         if next < 2:
@@ -61,7 +62,9 @@ def get_contour_fft(image_path, show_image, show_values):
 
     # Shows the black and white image with grayed contour
     if show_image:
-        image.show()
+        cv2.imshow('image2', image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
     
     # Prints amount of values in the contour and how many times wach one has been repeated
     if show_values:
@@ -80,6 +83,6 @@ def get_contour_fft(image_path, show_image, show_values):
     for i in xrange(len(fft)):
         fft[i] /= m
 
-    #return fft
-    return values[1:2**11+1]
+    return fft
+    #return values[1:2**11+1]
 
