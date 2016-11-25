@@ -4,27 +4,22 @@ import matplotlib.pyplot as plt
 
 def get_contour_fft(image_path, show_image, show_values):
     # Loads the image, resizes it to 640x480 and converts it to gray scale
-    #image = Image.open(image_path).resize((640,480)).convert('L')
-    threshold = 220
-    image = cv2.resize(cv2.imread(image_path, 0), (640,480))
+    img = cv2.resize(cv2.imread(image_path, 0), (640,480))
 
-    # Loads the image into pix as a numpy array
-    # Converts the image to black and white
-    for i in range(480):
-        for j in range(640):
-            if image[i, j] < threshold:
-                image[i, j] = 0
-            else:
-                image[i, j] = 255
+    # Applies Otsu threshold
+    ret2,image = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
-    flag = 0
     # Finds a point to start the algorithm
+    flag = 0
     for i in range(480):
         for j in range(640):
-            if image[i, j] == 0 and flag == 0:
+            if image[i, j] == 0:
                 x_i = i
                 y_i = j
                 flag = 1
+                break
+        if flag:
+            break
 
     next = 3
     # [x, y] is the starting point
