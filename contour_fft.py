@@ -4,15 +4,18 @@ import matplotlib.pyplot as plt
 
 def get_contour_fft(image_path, show_image, show_values):
     # Loads the image, resizes it to 640x480 and converts it to gray scale
+    # Once the image is taken from the camera, resize won't be neccesary
     img = cv2.resize(cv2.imread(image_path, 0), (640,480))
+    #img = cv2.imread(image_path, 0)
 
     # Applies Otsu threshold
     ret2,image = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    print (ret2)
 
     # Finds a point to start the algorithm
     flag = 0
-    for i in range(480):
-        for j in range(640):
+    for i in range(len(image)):
+        for j in range(len(image[0])):
             if image[i, j] == 0:
                 x_i = i
                 y_i = j
@@ -28,6 +31,7 @@ def get_contour_fft(image_path, show_image, show_values):
     image[x, y] = 128
     values = list()
 
+    # The vector of directions around the contour of the leaf is found in this loop
     while x != x_i or y != y_i or len(values) == 0:
         # Creates a list with the neighbour pixels
         neighbours = [[x-1, y-1], [x-1, y], [x-1, y+1], [x, y+1], [x+1, y+1], [x+1, y], [x+1, y-1], [x, y-1]]
