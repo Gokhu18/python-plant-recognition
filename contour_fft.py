@@ -1,17 +1,32 @@
-import cv2
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 import numpy as np
-import matplotlib.pyplot as plt
+import time
+import cv2
 
-def get_contour_fft(image_path, show_image, show_values):
+def get_contour_fft(image_path=False, show_image=False, show_values=False):
     # Loads the image, resizes it to 640x480 and converts it to gray scale
-    # Once the image is taken from the camera, resize won't be neccesary
-    img = cv2.resize(cv2.imread(image_path), (640,480))[:,:,0]
-    #img = cv2.imread(image_path, 0)
+    # if image_path=False the image is to be taken by the camera
+    if image_path:
+        # Once the images are taken from the camera, resize won't be neccesary
+        img = cv2.resize(cv2.imread(image_path), (640,480))[:,:,0]
+    else:
+        camera = PiCamera(resolution = (640, 480))
+        rawCapture = PiRGBArray(camera)
+        time.sleep(0.2)
+        camera.capture(rawCapture, format="bgr")
+        img = rawCapture.array[:,:,0]
 
     # Applies Otsu threshold
     ret2,image = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     print (ret2)
 
+    # Shows the black and white image with grayed contour
+    if show_image:
+        cv2.imshow('image2', image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+    
     # Finds a point to start the algorithm
     flag = 0
     for i in range(len(image)):
@@ -59,12 +74,6 @@ def get_contour_fft(image_path, show_image, show_values):
         else:
             next = next - 2
 
-    # Shows the black and white image with grayed contour
-    if show_image:
-        cv2.imshow('image2', image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-    
     # Prints amount of values in the contour and how many times wach one has been repeated
     if show_values:
         print 'values:',len(values),'0s:',values.count(0),'1s:',values.count(1),'2s:',values.count(2),'3s:',values.count(3),'4s:',values.count(4),'5s:',values.count(5),'6s:',values.count(6),'7s:',values.count(7)

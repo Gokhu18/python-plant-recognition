@@ -5,7 +5,9 @@ import numpy as np
 image_path = 'images/leaf4.jpg'
 show_image = True
 show_values = False
-fft = contour_fft.get_contour_fft(image_path, show_image, show_values)
+#fft = contour_fft.get_contour_fft(image_path, show_image, show_values)
+#fft = contour_fft.get_contour_fft(image_path, show_image)
+fft = contour_fft.get_contour_fft(False, True)
 
 #freq = np.fft.fftfreq(len(valores))
 #plt.plot(freq, fft.real, freq, fft.imag)
