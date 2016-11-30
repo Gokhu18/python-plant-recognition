@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 def get_contour_fft(image_path, show_image, show_values):
     # Loads the image, resizes it to 640x480 and converts it to gray scale
     # Once the image is taken from the camera, resize won't be neccesary
-    img = cv2.resize(cv2.imread(image_path, 0), (640,480))
+    img = cv2.resize(cv2.imread(image_path), (640,480))[:,:,0]
     #img = cv2.imread(image_path, 0)
 
     # Applies Otsu threshold
