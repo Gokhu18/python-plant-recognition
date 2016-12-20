@@ -7,6 +7,6 @@ for element in scanners.split('\n'):
     if 'libusb' in element:
         scanner = element[element.find('`')+1:element.find("'")]
 
-ins = 'scanimage --device "' + scanner +'" --format=tiff --resolution 75 > /home/seven/test.tiff'
+ins = 'scanimage --device "' + scanner +'" --format=jpeg -x 150 -y 150 > test/test.jpg'
 
 os.system(ins)
