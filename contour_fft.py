@@ -59,7 +59,9 @@ def get_contour_fft(image_path=False, show_image=False, show_values=False):
 
     # Shows the black and white image with grayed contour
     if show_image:
-        cv2.imshow('image2', cv2.resize(image, (480,480)) )
+        cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+        cv2.resizeWindow('image', 480,480)
+        cv2.imshow('image', image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
