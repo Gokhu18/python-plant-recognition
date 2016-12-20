@@ -2,13 +2,20 @@ import numpy as np
 import time
 import cv2
 
-def get_contour_fft(image_path=False, show_image=False, show_values=False):
+def get_contour_fft(image_path, show_image=False, show_values=False):
     # Loads the image from image_path
     img = cv2.imread(image_path)[:,:,0]
 
     # Applies Otsu threshold
     ret2,image = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    print (ret2)
+
+    # Shows the black and white image with grayed contour
+    if show_image:
+        cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+        cv2.resizeWindow('image', 480,480)
+        cv2.imshow('image', image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
     # Finds a point to start the algorithm
     flag = 0
@@ -56,14 +63,6 @@ def get_contour_fft(image_path=False, show_image=False, show_values=False):
             next = 5 + next
         else:
             next = next - 2
-
-    # Shows the black and white image with grayed contour
-    if show_image:
-        cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('image', 480,480)
-        cv2.imshow('image', image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
 
     # Prints amount of values in the contour and how many times wach one has been repeated
     if show_values:
