@@ -36,10 +36,11 @@ def get_contour_fft(image_path, show_image=False, show_values=False):
     image[x, y] = 128
     values = list()
 
-    # The vector of directions around the contour of the leaf is found in this loop
+    # Find the vector of directions around the leaf's contour
     while x != x_i or y != y_i or len(values) == 0:
         # Creates a list with the neighbour pixels
-        neighbours = [[x-1, y-1], [x-1, y], [x-1, y+1], [x, y+1], [x+1, y+1], [x+1, y], [x+1, y-1], [x, y-1]]
+        neighbours = [[x-1, y-1], [x-1, y], [x-1, y+1], [x, y+1], [x+1, y+1],
+            [x+1, y], [x+1, y-1], [x, y-1]]
         # Finds the direction of the next pixel clockwise
         for i in range(8):
             pixel = image[neighbours[next][0], neighbours[next][1]]
@@ -64,15 +65,19 @@ def get_contour_fft(image_path, show_image=False, show_values=False):
         else:
             next = next - 2
 
-    # Prints amount of values in the contour and how many times wach one has been repeated
+    # Prints amount of values and how many times each one has been repeated
     if show_values:
-        print 'values:',len(values),'0s:',values.count(0),'1s:',values.count(1),'2s:',values.count(2),'3s:',values.count(3),'4s:',values.count(4),'5s:',values.count(5),'6s:',values.count(6),'7s:',values.count(7)
+        print 'Values: {}, 0s: {}, 1s: {}, 2s: {}, 3s: {}, 4s: {}, 5s: {}, '\
+            '6s: {}, 7s: {}'.format(len(values), values.count(0),
+            values.count(1), values.count(2), values.count(3), values.count(4),
+            values.count(5), values.count(6), values.count(7))
 
     # Zero padding to get a 4096 length vector
     while (len(values) < 2**12):
         values.append(0)
 
-    # Computes FFT, eliminates the second half of the spectrum and computes absoulte values
+    # Computes FFT, eliminates the second half of the spectrum and computes
+    # absoulte values
     fft = np.fft.fft(values)[1:2**11+1]
     fft = np.absolute(fft)
 
@@ -82,4 +87,3 @@ def get_contour_fft(image_path, show_image=False, show_values=False):
         fft[i] /= m
 
     return fft
-    #return values[1:2**11+1]
