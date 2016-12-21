@@ -20,5 +20,5 @@ fft = contour_fft.get_contour_fft(image_path, show_image, show_values)
 #plt.plot(freq, fft.real, freq, fft.imag)
 #plt.plot(valores)
 #print np.absolute(fft)[:10]
-#plt.plot(np.absolute(fft)[:2**11])
-#plt.show()
+plt.plot(np.absolute(fft))
+plt.show()
