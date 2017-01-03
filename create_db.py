@@ -1,9 +1,11 @@
 # This program takes as argument the species of the leaf to scan and
-# saves and saves an image to the database folder
+# saves an image to the database folder
+# Example: python2 create_db.py pepino
 
 import subprocess
 import sys, os
 
+# Verify correct number of command line arguments
 if len(sys.argv) != 2:
     print 'Error: This program should receive the species of the leaf!'
     print 'Example: python2 create_db.py pepino\n'
@@ -11,6 +13,7 @@ if len(sys.argv) != 2:
 
 species = sys.argv[1]
 
+# Get names of all scanners and cameras connected
 scanners = subprocess.check_output(['scanimage', '-L'])
 
 # Get the name of the scanner and avoid cameras
