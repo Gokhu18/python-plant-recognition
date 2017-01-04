@@ -7,7 +7,12 @@ def get_contour_fft(image_path, show_image=False, show_values=False):
     img = cv2.imread(image_path)[:,:,0]
 
     # Applies Otsu threshold
-    ret2,image = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    ret2,img = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+
+    # Closing operation (wich would be opening if object were white) to
+    # eliminate noise due to small particles as dust
+    kernel = np.ones((3,3), np.uint8)
+    image = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
     # Shows the black and white image with grayed contour
     if show_image:
