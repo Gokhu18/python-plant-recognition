@@ -2,9 +2,8 @@ import matplotlib.pyplot as plt
 import contour_fft
 import numpy as np
 
-
-image_path1 = 'images/leaf1.jpg'
-image_path2 = 'images/leaf4.jpg'
+image_path1 = 'database/pepino_1.jpg'
+image_path2 = 'database/pepino_4.jpg'
 show_image = True
 show_values = True
 
