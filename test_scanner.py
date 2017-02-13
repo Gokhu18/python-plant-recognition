@@ -1,3 +1,7 @@
+# This program takes no arguments, creates a connection to a Scanner,
+# takes an image and stores it on the test folder.
+# Usage: python2 test_scanner.py
+
 import subprocess
 import os
 
