@@ -3,6 +3,13 @@ import time
 import cv2
 
 def get_contour_fft(image_path, show_image=False, show_values=False):
+    ''' Obtains FFT from contour vector of a leaf image in image_path
+
+    This function takes three arguments: the path to the image, and two more
+    to show the image from image_path and show the obtained values. Calculates
+    a vector from the contour of the leaf in a clockwise direction and returns
+    the FFT from that vector
+    '''
     # Loads the image from image_path
     img = cv2.imread(image_path)[:,:,0]
 
