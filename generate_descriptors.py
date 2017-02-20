@@ -1,5 +1,5 @@
-# This program takes no input and generates the average descriptors of each
-# of the species on the database folder
+# This program takes no input and generates the descriptors of each image
+# on the database folder, saving them as a dictionary on descriptors.txt
 # Usage: python2 generate_descriptors.py
 
 import matplotlib.pyplot as plt
@@ -14,22 +14,17 @@ output_file = 'descriptors.txt'
 print('Reading files...\n')
 images = sorted(os.listdir(folder))
 
-name = ''
 descriptors = {}
 
 print('Calculating FFTs...\n')
 for image in images:
-    name = image[:image.index('_')]
-    if name not in descriptors:
-        print(name)
-        descriptors[name] = list()
+    species = image[:image.index('_')]
+    if species not in descriptors:
+        print(species)
+        descriptors[species] = list()
 
     fft = contour_fft.get_contour_fft(folder+'/'+image)
-    descriptors[name].append(fft)
-
-print('\nCalculating FFT average of each species...\n')
-for specie,descriptor in descriptors.items():
-    descriptors[specie] = list(np.mean(descriptor, axis=0))
+    descriptors[species].append(fft)
 
 with open(output_file, 'w') as f:
     f.write(json.dumps(descriptors))
