@@ -16,15 +16,13 @@ images = sorted(os.listdir(folder))
 
 descriptors = {}
 
-print('Calculating FFTs...\n')
+print('Calculating FFTs...')
 for image in images:
-    species = image[:image.index('_')]
-    if species not in descriptors:
-        print(species)
-        descriptors[species] = list()
-
+    name = image[:image.index('.')]
+    print(name)
     fft = contour_fft.get_contour_fft(folder+'/'+image)
-    descriptors[species].append(fft)
+    descriptors[name] = list(fft)
 
+print('Saving to file...\n')
 with open(output_file, 'w') as f:
     f.write(json.dumps(descriptors))
