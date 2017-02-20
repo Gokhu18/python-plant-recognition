@@ -22,6 +22,11 @@ show_values = False
 fft = contour_fft.get_contour_fft(image_path, show_image, show_values)
 
 descriptors = json.load(file(input_file))
-
+result = list()
 for name, descriptor in descriptors.items():
-    print(name, np.correlate(fft, descriptor)[0])
+    result.append([name, np.correlate(fft, descriptor)[0]])
+
+result = sorted(result, key = lambda x: x[1], reverse=True)
+
+for element in result:
+    print(element)
