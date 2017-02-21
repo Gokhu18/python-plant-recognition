@@ -25,10 +25,10 @@ for element in scanners.split('\n'):
 images = os.listdir('database')
 i = 1
 
-while species+'_'+str(i)+'.jpg' in images:
+while species+'.'+str(i)+'.jpg' in images:
     i += 1
 
-name = species+'_'+str(i)+'.jpg'
+name = species+'.'+str(i)+'.jpg'
 
 # Changed coordinates to avoid black corner, resolution is 150 DPI
 command = 'scanimage --device "'+ scanner +'" --format=jpeg -l 5 -x 180 -y 180 > database/'
