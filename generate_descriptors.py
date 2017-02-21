@@ -2,7 +2,7 @@
 # on the database folder, saving them as a dictionary on descriptors.txt
 # Usage: python2 generate_descriptors.py
 
-import matplotlib.pyplot as plt
+from imutils import paths
 import contour_fft
 import numpy as np
 import json
@@ -18,7 +18,7 @@ descriptors = {}
 
 print('Calculating FFTs...')
 for image in images:
-    name = image[:image.index('.')]
+    name = image.split('.')[0]
     print(name)
     fft = contour_fft.get_contour_fft(folder+'/'+image)
     descriptors[name] = list(fft)

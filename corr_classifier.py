@@ -16,10 +16,8 @@ if len(sys.argv) != 2:
 
 input_file = 'descriptors.txt'
 image_path = sys.argv[1]
-show_image = True
-show_values = False
 
-fft = contour_fft.get_contour_fft(image_path, show_image, show_values)
+fft = contour_fft.get_contour_fft(image_path)
 
 descriptors = json.load(file(input_file))
 result = list()
