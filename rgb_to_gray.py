@@ -1,3 +1,8 @@
+''' This program reads the image from img_path and converts it to gray scale
+using two different algorithms, then shows the original and the gray scale
+images for comparison
+'''
+
 import cv2
 
 img_path = 'database/rabano.1.jpg'
