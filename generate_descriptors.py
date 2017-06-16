@@ -1,28 +1,55 @@
-# This program takes no input and generates the descriptors of each image
-# on the database folder, saving them as a dictionary on descriptors.txt
-# Usage: python2 generate_descriptors.py
+## This program takes a dataset and calculates the fft of the contour
+# vector of each image and saves all those features on a file to later
+# processing
+## USAGE
+# python generate_descriptors.py --dataset database --output_file file
 
+# import the necessary pre-installed packages
 from imutils import paths
-import contour_fft
-import numpy as np
+import argparse
 import json
 import os
 
-folder = 'database'
-output_file = 'descriptors.txt'
+# import self-made library
+import contour_fft
 
-print('Reading files...\n')
-images = sorted(os.listdir(folder))
+# construct the argument parse and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-d", "--dataset", required=True,
+	help="path to input dataset")
+ap.add_argument("-f", "--output_file", required=True,
+	help="path to save output file")
+args = vars(ap.parse_args())
 
-descriptors = {}
+# grab the list of images that we'll be describing
+print("[INFO] describing images...")
+imagePaths = list(paths.list_images(args["dataset"]))
 
-print('Calculating FFTs...')
-for image in images:
-    name = image.split('.')[0]
-    print(name)
-    fft = contour_fft.get_contour_fft(folder+'/'+image)
-    descriptors[name] = list(fft)
+# initialize the raw pixel intensities matrix, the features matrix,
+# and labels list
+features = []
+labels = []
 
-print('Saving to file...\n')
-with open(output_file, 'w') as f:
-    f.write(json.dumps(descriptors))
+# loop over the input images
+for (i, imagePath) in enumerate(imagePaths):
+	# update every 10 images processed
+    if (i+1)%10 == 0:
+        print("[INFO] describing image: ", i+1)
+    # load the image and extract the class label (assuming that our
+    # path as the format: /path/to/dataset/{class}.{image_num}.jpg
+    label = imagePath.split(os.path.sep)[-1].split(".")[0]
+
+    # extract contour fft
+    contour = contour_fft.get_contour_fft(imagePath)
+
+    # update the features, and labels matricies, respectively
+    features.append(contour)
+    labels.append(label)
+
+# Convert from numpy array to python standard list to be able to save it
+features = [list(i) for i in features]
+
+# Save descriptors to file for later processing using different algorithms
+print("[INFO] saving descriptors...")
+with open(args["output_file"], 'w') as f:
+    f.write(json.dumps([list(features), list(labels)]))
