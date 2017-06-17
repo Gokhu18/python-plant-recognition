@@ -3,47 +3,25 @@
 
 # import the necessary packages
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.cross_validation import train_test_split
-from imutils import paths
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 import numpy as np
 import argparse
-import imutils
-import cv2
-import os
-
-import contour_fft
+import json
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-d", "--dataset", required=True,
-	help="path to input dataset")
+ap.add_argument("-d", "--descriptors", required=True,
+	help="path to descriptors file")
 ap.add_argument("-k", "--neighbors", type=int, default=1,
 	help="# of nearest neighbors for classification")
 ap.add_argument("-j", "--jobs", type=int, default=-1,
 	help="# of jobs for k-NN distance (-1 uses all available cores)")
 args = vars(ap.parse_args())
 
-# grab the list of images that we'll be describing
-print("[INFO] describing images...")
-imagePaths = list(paths.list_images(args["dataset"]))
-
-# initialize the raw pixel intensities matrix, the features matrix,
-# and labels list
-features = []
-labels = []
-
-# loop over the input images
-for (i, imagePath) in enumerate(imagePaths):
-	# load the image and extract the class label (assuming that our
-	# path as the format: /path/to/dataset/{class}.{image_num}.jpg
-	label = imagePath.split(os.path.sep)[-1].split(".")[0]
-
-	# extract contour fft
-	contour = contour_fft.get_contour_fft(imagePath)
-
-	# update the features, and labels matricies, respectively
-	features.append(contour)
-	labels.append(label)
+# load descriptors
+with open(args["descriptors"], 'r') as f:
+	features,labels = json.load(f)
 
 features = np.array(features)
 labels = np.array(labels)
@@ -56,11 +34,10 @@ labels = np.array(labels)
 print("[INFO] features matrix: {:.2f}MB".format(
 	features.nbytes / (1024 * 1000.0)))
 
-# train and evaluate a k-NN classifer on the histogram
-# representations
-print("[INFO] evaluating algorithm accuracy...")
-model = KNeighborsClassifier(n_neighbors=args["neighbors"],
+# train and evaluate a k-NN classifer on the contour ffts
+print("[INFO] evaluating K-NN accuracy...")
+knn = KNeighborsClassifier(n_neighbors=args["neighbors"],
 	n_jobs=args["jobs"])
-model.fit(trainFeat, trainLabels)
-acc = model.score(testFeat, testLabels)
-print("[INFO] algorithm accuracy: {:.2f}%".format(acc * 100))
+knn.fit(trainFeat, trainLabels)
+acc = knn.score(testFeat, testLabels)
+print("[INFO] K-NN accuracy: {:.2f}%".format(acc * 100))
