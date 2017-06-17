@@ -29,7 +29,7 @@ labels = np.array(labels)
 # partition the data into training and testing splits, using 75%
 # of the data for training and the remaining 25% for testing
 (trainFeat, testFeat, trainLabels, testLabels) = train_test_split(
-	features, labels, test_size=0.25, random_state=42)
+	features, labels, test_size=0.15, random_state=42)
 
 print("[INFO] features matrix: {:.2f}MB".format(
 	features.nbytes / (1024 * 1000.0)))
