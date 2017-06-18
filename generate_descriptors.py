@@ -16,9 +16,9 @@ import contour_fft
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True,
-	help="path to input dataset")
+    help="path to input dataset")
 ap.add_argument("-f", "--output_file", required=True,
-	help="path to save output file")
+    help="path to save output file")
 args = vars(ap.parse_args())
 
 # grab the list of images that we'll be describing
@@ -32,7 +32,7 @@ labels = []
 
 # loop over the input images
 for (i, imagePath) in enumerate(imagePaths):
-	# update every 10 images processed
+    # update every 10 images processed
     if (i+1)%10 == 0:
         print("[INFO] describing image: ", i+1)
     # load the image and extract the class label (assuming that our
