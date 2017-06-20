@@ -12,7 +12,7 @@ import json
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--descriptors", required=True,
 	help="path to descriptors file")
-ap.add_argument("-k", "--neighbors", type=int, default=1,
+ap.add_argument("-n", "--neighbors", type=int, default=1,
 	help="# of nearest neighbors for classification")
 ap.add_argument("-j", "--jobs", type=int, default=-1,
 	help="# of jobs for k-NN distance (-1 uses all available cores)")
@@ -25,8 +25,8 @@ with open(args["descriptors"], 'r') as f:
 features = np.array(features)
 labels = np.array(labels)
 
-# partition the data into training and testing splits, using 75%
-# of the data for training and the remaining 25% for testing
+# partition the data into training and testing splits, using 85%
+# of the data for training and the remaining 15% for testing
 (trainFeat, testFeat, trainLabels, testLabels) = train_test_split(
 	features, labels, test_size=0.15, random_state=42)
 
